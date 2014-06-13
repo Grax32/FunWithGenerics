@@ -6,7 +6,7 @@ namespace FunWithGenerics.UnitTests
     [TestClass]
     public class DynomiteTest
     {
-        [TestMethod]
+        //[TestMethod]
         public void TestMethod1()
         {
             //var x = new Dynomite.DynoType<MyBaseClass>();
