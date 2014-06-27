@@ -7,7 +7,7 @@ using System.Text;
 
 namespace FunWithGenerics.DemoObjects
 {
-    public class SimpleConcreteType : ISimpleType
+    public class MyConcreteType : IMyInterface
     {
         int _roadLength = 5;
 

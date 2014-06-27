@@ -17,12 +17,14 @@ namespace FunWithGenerics.UnitTests
         public void Presentation_011_SimpleResolverDemonstration()
         {
             Debug.WriteLine("--Resolver Demonstration--");
-            SimpleGenericResolver<ISimpleType>.InstanceCreateFunction = () => new SimpleConcreteType();
+            SimpleGenericResolver<IMyInterface>.InstanceCreateFunction = 
+                () => new MyConcreteType();
 
 
 
 
-            var myInterfaceInstanceReference = SimpleGenericResolver<ISimpleType>.InstanceCreateFunction.Invoke();
+            var myInterfaceInstanceReference = 
+                SimpleGenericResolver<IMyInterface>.InstanceCreateFunction.Invoke();
 
             Debug.WriteLine("Road Length: {0}", myInterfaceInstanceReference.GetRoadLength().ToString());
             myInterfaceInstanceReference.UpdateRoadLength(99);
@@ -35,9 +37,9 @@ namespace FunWithGenerics.UnitTests
 
 
 
-            SimpleGenericResolver<ISimpleType>.RegisterType<OtherSimpleConcreteType>();
+            SimpleGenericResolver<IMyInterface>.RegisterType<OtherSimpleConcreteType>();
 
-            var myOtherInterface = SimpleGenericResolver<ISimpleType>.InstanceCreateFunction.Invoke();
+            var myOtherInterface = SimpleGenericResolver<IMyInterface>.InstanceCreateFunction.Invoke();
 
             Debug.WriteLine("Road Length: {0}", myOtherInterface.GetRoadLength().ToString());
             myOtherInterface.UpdateRoadLength(99);
@@ -46,11 +48,11 @@ namespace FunWithGenerics.UnitTests
 
             string constructorParm = "ChangeMe";
 
-            SimpleGenericResolver<ISimpleType>.InstanceCreateFunction = () => new OtherSimpleConcreteType(constructorParm);
+            SimpleGenericResolver<IMyInterface>.InstanceCreateFunction = () => new OtherSimpleConcreteType(constructorParm);
 
             constructorParm = "Changed";
 
-            var myOtherInterface2 = SimpleGenericResolver<ISimpleType>.InstanceCreateFunction.Invoke();
+            var myOtherInterface2 = SimpleGenericResolver<IMyInterface>.InstanceCreateFunction.Invoke();
 
             Debug.WriteLine("Road Length: {0}", myOtherInterface2.GetRoadLength().ToString());
             myOtherInterface2.UpdateRoadLength(99);
@@ -60,20 +62,18 @@ namespace FunWithGenerics.UnitTests
 
         [TestMethod]
         public void Presentation_012_SimpleResolverDemonstration2()
-        {
-            SimpleGenericResolver<IGenericResolverLogger>.InstanceCreateFunction = () => new GenericResolverDebugLogger("Constructor Prefix");
-
-            var myOtherInterface = SimpleGenericResolver<IGenericResolverLogger>.InstanceCreateFunction.Invoke();
-            myOtherInterface.Log("Logging Error");
-
-
-
-            SimpleGenericResolver<IGenericResolverLogger>.RegisterType<GenericResolverConsoleLogger>();
+        {            
+            SimpleGenericResolver<IGenericResolverLogger>.RegisterType<MyConsoleLogger>();
 
             var myInterface = SimpleGenericResolver<IGenericResolverLogger>.InstanceCreateFunction.Invoke();
 
-            myInterface.Log("Logging Another Error");
+            myInterface.Log("This should be logged using the MyConsoleLogger");
 
+
+            SimpleGenericResolver<IGenericResolverLogger>.InstanceCreateFunction = () => new MyDebugLogger("Constructor Prefix");
+            
+            var myOtherInterface = SimpleGenericResolver<IGenericResolverLogger>.InstanceCreateFunction.Invoke();
+            myOtherInterface.Log("This should be logged using the MyDebugLogger");
 
         }
 
@@ -82,26 +82,26 @@ namespace FunWithGenerics.UnitTests
             void Log(string errorMessage);
         }
 
-        public class GenericResolverConsoleLogger : IGenericResolverLogger
+        public class MyConsoleLogger : IGenericResolverLogger
         {
             public void Log(string errorMessage)
             {
-                Debug.Print("GenericResolverConsoleLogger: " + errorMessage);
+                Debug.Print("MyConsoleLogger: " + errorMessage);
             }
         }
 
-        public class GenericResolverDebugLogger : IGenericResolverLogger
+        public class MyDebugLogger : IGenericResolverLogger
         {
             readonly string _prefix;
 
-            public GenericResolverDebugLogger(string prefix)
+            public MyDebugLogger(string prefix)
             {
                 _prefix = prefix;
             }
 
             public void Log(string errorMessage)
             {
-                Debug.Print(string.Format("GenericResolverDebugLogger: {0} {1}", _prefix, errorMessage));
+                Debug.Print(string.Format("MyDebugLogger: {0} {1}", _prefix, errorMessage));
             }
         }
     }

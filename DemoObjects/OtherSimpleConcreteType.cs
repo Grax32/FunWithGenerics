@@ -7,7 +7,7 @@ using System.Text;
 
 namespace FunWithGenerics.DemoObjects
 {
-    public class OtherSimpleConcreteType : ISimpleType
+    public class OtherSimpleConcreteType : IMyInterface
     {
         readonly string _parm;
 

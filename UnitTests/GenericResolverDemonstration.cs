@@ -1,10 +1,12 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using FunWithGenerics.DemoObjects.GenericResolverClasses;
 using FunWithGenerics.Generics;
-using FunWithGenerics.DemoObjects.GenericResolverClasses;
-using System.Diagnostics;
 using Microsoft.Practices.Unity;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 namespace FunWithGenerics.UnitTests
 {
@@ -29,54 +31,83 @@ namespace FunWithGenerics.UnitTests
             InitializeEmbedIOCResolver();
             var watch = new Stopwatch();
             var oneMillion = 1000000;
+            double computeRelativeBaseTicks = 0;
 
             watch.Start();
             for (int i = 0; i < oneMillion; i++)
             {
                 var myVar = new CustomDbContext();
             }
-            Log("new from Constructor {0} ", FormatTicks(watch.ElapsedTicks));
+            watch.Stop();
+            //Log("new from Constructor {0} ", FormatTicks(watch.ElapsedTicks));
+            computeRelativeBaseTicks = watch.ElapsedTicks;
+            Log("new from Constructor {0} ", FormatRelativeUnits(watch.ElapsedTicks / computeRelativeBaseTicks));
+
 
             watch.Restart();
             for (int i = 0; i < oneMillion; i++)
             {
-                var myVar = GenericResolver<CustomDbContext>.Resolve();
+                var myVar = new Repository(new CustomDbContext());
             }
-            Log("new from GenericResolver {0} ", FormatTicks(watch.ElapsedTicks));
+            watch.Stop();
+            //Log("complex new from Constructor {0} ", FormatTicks(watch.ElapsedTicks));
+            Log("complex new from Constructor {0} ", FormatRelativeUnits(watch.ElapsedTicks / computeRelativeBaseTicks));
 
-            watch.Restart();
-            for (int i = 0; i < oneMillion; i++)
-            {
-                var myVar = GenericResolver<IRepository>.Resolve();
-            }
-            Log("complex new from GenericResolver {0} ", FormatTicks(watch.ElapsedTicks));
-            watch.Restart();
-            for (int i = 0; i < oneMillion; i++)
-            {
-                var myVar = unity.Resolve<IRepository>();
-            }
-            Log("complex new from Unity {0} ", FormatTicks(watch.ElapsedTicks));
+            //watch.Restart();
+            //for (int i = 0; i < oneMillion; i++)
+            //{
+            //    var myVar = GenericResolver<CustomDbContext>.Resolve();
+            //}
+            //Log("new from GenericResolver {0} ", FormatTicks(watch.ElapsedTicks));
+
+            //watch.Restart();
+            //for (int i = 0; i < oneMillion; i++)
+            //{
+            //    var myVar = GenericResolver<IRepository>.Resolve();
+            //}
+            //Log("complex new from GenericResolver {0} ", FormatTicks(watch.ElapsedTicks));
 
             watch.Restart();
             for (int i = 0; i < oneMillion; i++)
             {
                 var myVar = EmbedIOC.Resolve<ICustomDbContext>();
             }
-            Log("new from EmbedIOC {0} ", FormatTicks(watch.ElapsedTicks));
+            //Log("new from EmbedIOC {0} ", FormatTicks(watch.ElapsedTicks));
+            Log("new from EmbedIOC {0} ", FormatRelativeUnits(watch.ElapsedTicks / computeRelativeBaseTicks));
 
             watch.Restart();
             for (int i = 0; i < oneMillion; i++)
             {
                 var myVar = EmbedIOC.Resolve<IRepository>();
             }
-            Log("complex new from EmbedIOC {0} ", FormatTicks(watch.ElapsedTicks));
+            //Log("complex new from EmbedIOC (generic) {0} ", FormatTicks(watch.ElapsedTicks));
+            Log("complex new from EmbedIOC (generic) {0} ", FormatRelativeUnits(watch.ElapsedTicks / computeRelativeBaseTicks));
+
+            var typeofICustomDbContext = typeof(ICustomDbContext);
 
             watch.Restart();
             for (int i = 0; i < oneMillion; i++)
             {
-                var myVar = EmbedIOC.Resolve(typeof(ICustomDbContext));
+                var myVar = EmbedIOC.Resolve(typeofICustomDbContext);
             }
-            Log("new from EmbedIOC type object {0} ", FormatTicks(watch.ElapsedTicks));
+            //Log("new from EmbedIOC (type object) {0} ", FormatTicks(watch.ElapsedTicks));
+            Log("new from EmbedIOC (type object) {0} ", FormatRelativeUnits(watch.ElapsedTicks / computeRelativeBaseTicks));
+
+            watch.Restart();
+            for (int i = 0; i < oneMillion; i++)
+            {
+                var myVar = unity.Resolve<ICustomDbContext>();
+            }
+            //Log("new from Unity {0} ", FormatTicks(watch.ElapsedTicks));
+            Log("new from Unity {0} ", FormatRelativeUnits(watch.ElapsedTicks / computeRelativeBaseTicks));
+
+            watch.Restart();
+            for (int i = 0; i < oneMillion; i++)
+            {
+                var myVar = unity.Resolve<IRepository>();
+            }
+            //Log("complex new from Unity {0} ", FormatTicks(watch.ElapsedTicks));
+            Log("complex new from Unity {0} ", FormatRelativeUnits(watch.ElapsedTicks / computeRelativeBaseTicks));
 
             Log("");
         }
@@ -125,6 +156,11 @@ namespace FunWithGenerics.UnitTests
         public static string FormatTicks(long ticks)
         {
             return "took " + ticks.ToString("#,##0") + " ticks";
+        }
+
+        public static string FormatRelativeUnits(double units)
+        {
+            return "took " + units.ToString("N4") + " times the basic 'new'";
         }
     }
 }

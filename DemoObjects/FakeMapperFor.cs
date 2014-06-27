@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FunWithGenerics.DemoObjects
 {
-    public class StaticVariableNonGeneric
+    public class FakeMapperFor<T1, T2>
     {
         public static int StaticId { get; set; }
 
@@ -18,5 +18,7 @@ namespace FunWithGenerics.DemoObjects
         {
             return StaticId;
         }
+
+        public static Func<T1, T2> Converter { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace FunWithGenerics.Generics
         private readonly static MethodInfo ResolveMethod = typeof(EmbedIOC).GetMethod("Resolve", new Type[] { });
         private readonly static Dictionary<Type, Func<object>> ResolverCache = new Dictionary<Type, Func<object>>();
 
-        public static T Resolve<T>() { return Resolver<T>._resolveFunction(); }
+        public static T Resolve<T>() { return Resolver<T>._resolveFunction.Invoke(); }
 
         public static object Resolve(Type type)
         {
@@ -28,7 +28,9 @@ namespace FunWithGenerics.Generics
 
         private static Func<object> FuncFromMethodInfo(MethodInfo method)
         {
-            return (Func<object>)Expression.Lambda<Func<object>>(Expression.Convert(Expression.Call(method), typeof(object))).Compile();
+            return (Func<object>)Expression.Lambda<Func<object>>(
+                Expression.Convert(Expression.Call(method), typeof(object)))
+                .Compile();
         }
 
         public static void Register<T>(Func<T> resolver)

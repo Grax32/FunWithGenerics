@@ -16,13 +16,13 @@ namespace FunWithGenerics.DemoObjects
         static int _SomeValueSecond = InitializeSomeSecondValue();
         static DateTime InitializeSomeFirstValue()
         {
-            Debug.Print("WC: Initializing _SomeValueFirst");
+            Debug.Print("WC: Initializing _SomeValueFirst ({0})", DateTime.Now);
             return DateTime.Now;
         }
 
         static int InitializeSomeSecondValue()
         {
-            Debug.Print("WC: Initializing _SomeValueSecond");
+            Debug.Print("WC: Initializing _SomeValueSecond ({0})", DateTime.Now);
             return DateTime.Now.Second;
         }
 

@@ -5,9 +5,13 @@ using System.Text;
 
 namespace FunWithGenerics.DemoObjects
 {
-    public class StaticVariableGenericTwo<T1, T2>
+    public class FakeThingFor<T>
     {
-        public static int StaticId { get; set; }
+        public static int StaticId
+        {
+            get;
+            set;
+        }
 
         public void SetStaticId(int newId)
         {
@@ -18,7 +22,5 @@ namespace FunWithGenerics.DemoObjects
         {
             return StaticId;
         }
-
-        public static Func<T1, T2> Converter { get; set; }
     }
 }

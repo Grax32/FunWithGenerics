@@ -25,11 +25,11 @@ namespace FunWithGenerics.UnitTests
             //EmbedIOCStep1<IMyInterface>.Resolver = () => new MyClass();
             EmbedIOCStep1<IMyInterface>.Resolver = CreateMyClass;
 
-            var result1 = EmbedIOCStep1<IMyInterface>.Resolver();
+            var result1 = EmbedIOCStep1<IMyInterface>.Resolver.Invoke();
 
             EmbedIOCStep1<IMyInterface>.Resolver = () => new MyOtherClass();
 
-            var result2 = EmbedIOCStep1<IMyInterface>.Resolver();
+            var result2 = EmbedIOCStep1<IMyInterface>.Resolver.Invoke();
         }
 
         [TestMethod]

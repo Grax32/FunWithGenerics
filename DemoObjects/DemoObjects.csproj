@@ -64,9 +64,9 @@
     <Compile Include="SimpleConcreteType.cs" />
     <Compile Include="StaticInitializationWithoutConstructor.cs" />
     <Compile Include="StaticInitializationWithConstructor.cs" />
-    <Compile Include="StaticVariableGenericTwo.cs" />
-    <Compile Include="StaticVariableGeneric.cs" />
-    <Compile Include="StaticVariableNonGeneric.cs" />
+    <Compile Include="FakeMapperFor.cs" />
+    <Compile Include="FakeThingFor.cs" />
+    <Compile Include="FakeThing.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interfaces\InterfacesAndDataContainers.csproj">

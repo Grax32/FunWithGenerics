@@ -5,9 +5,13 @@ using System.Text;
 
 namespace FunWithGenerics.DemoObjects
 {
-    public class StaticVariableGeneric<T>
+    public class FakeThing
     {
-        public static int StaticId { get; set; }
+        public static int StaticId
+        {
+            get;
+            set;
+        }
 
         public void SetStaticId(int newId)
         {

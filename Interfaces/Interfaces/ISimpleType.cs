@@ -3,7 +3,7 @@ using System;
 
 namespace FunWithGenerics.InterfacesAndDataContainers.Interfaces
 {
-    public interface ISimpleType
+    public interface IMyInterface
     {
         SimpleDataContainer GetSimpleClassForId(int id);
         void UpdateRoadLength(int newLength);
